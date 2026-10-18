@@ -2,21 +2,35 @@
 # Roda a matriz de testes de carga: para cada quantidade de cópias do
 # WordPress, executa os 3 cenários com cada quantidade de usuários.
 #
-# Uso: ./rodar_testes.sh
+# Uso: ./rodar_testes.sh                         (Nginx original do Trabalho 2)
+#      NGINX_OTIMIZADO=true ./rodar_testes.sh    (Nginx sem o limite de conexões)
+#
+# Os resultados ficam em resultados/nginx-original/ ou resultados/nginx-otimizado/
 #
 # Os valores abaixo podem ser trocados por variáveis de ambiente, por exemplo
 # para um teste rápido:  INSTANCIAS="1" USUARIOS="10" DURACAO=10s ./rodar_testes.sh
 #
+# PASTA grava numa subpasta dentro dessa pasta, por exemplo para a exploração
+# que escolhe as quantidades de usuários:
+#   PASTA=exploracao INSTANCIAS="1" USUARIOS="500 2000 5000" ./rodar_testes.sh
+#
+# Falhas nas requisições NÃO param o script: elas fazem parte do resultado.
 # Se o script for interrompido, basta rodar de novo: as rodadas que já têm
-# CSV em resultados/ são puladas.
+# CSV são puladas.
 set -euo pipefail
 cd "$(dirname "$0")"
 
 INSTANCIAS=${INSTANCIAS:-"1 5 10"} # cópias do WordPress
-USUARIOS=${USUARIOS:-"10 100 1000"} # usuários simulados pelo Locust
+USUARIOS=${USUARIOS:-"500 2000 5000"} # usuários: sem erros, intermediário, muitos erros
 CENARIOS=${CENARIOS:-"1 2 3"}
 DURACAO=${DURACAO:-2m}              # duração de cada rodada
 PAUSA=${PAUSA:-30}                  # segundos de pausa entre rodadas
+PASTA=${PASTA:-}                    # subpasta opcional (ex: exploracao)
+export NGINX_OTIMIZADO=${NGINX_OTIMIZADO:-false} # lido também pelo escalar.sh
+
+if [ "$NGINX_OTIMIZADO" = true ]; then TIPO=nginx-otimizado; else TIPO=nginx-original; fi
+RELATIVO="$TIPO${PASTA:+/$PASTA}"   # caminho dentro de resultados/
+DESTINO="resultados/$RELATIVO"
 
 # Script do Locust de cada cenário
 script_do_cenario() {
@@ -27,9 +41,10 @@ script_do_cenario() {
   esac
 }
 
-# Usuários que entram por segundo (-r): todos sobem em no máximo 20 s
+# Usuários que entram por segundo (-r): no mínimo 10/s, e todos sobem em ~20 s
 taxa_de_entrada() {
-  if [ "$1" -le 100 ]; then echo 10; else echo 50; fi
+  local taxa=$(( $1 / 20 ))
+  if [ "$taxa" -lt 10 ]; then echo 10; else echo "$taxa"; fi
 }
 
 # Espera o Nginx distribuir as requisições entre exatamente N cópias
@@ -59,12 +74,13 @@ esperar_wordpress() {
 
 total=$(( $(wc -w <<< "$INSTANCIAS") * $(wc -w <<< "$CENARIOS") * $(wc -w <<< "$USUARIOS") ))
 rodada=0
-mkdir -p resultados/logs
+mkdir -p "$DESTINO/logs"
+echo "Nginx: $TIPO | resultados em $DESTINO/"
 
 for n in $INSTANCIAS; do
   echo "=== Subindo $n cópia(s) do WordPress"
-  if ! ./escalar.sh "$n" > "resultados/logs/escalar_${n}.log" 2>&1; then
-    echo "ERRO: ./escalar.sh $n falhou. Veja resultados/logs/escalar_${n}.log" >&2
+  if ! ./escalar.sh "$n" > "$DESTINO/logs/escalar_${n}.log" 2>&1; then
+    echo "ERRO: ./escalar.sh $n falhou. Veja $DESTINO/logs/escalar_${n}.log" >&2
     exit 1
   fi
   esperar_copias "$n"
@@ -76,26 +92,41 @@ for n in $INSTANCIAS; do
       rodada=$((rodada + 1))
       nome="c${c}_i${n}_u${u}"
 
-      if [ -f "resultados/${nome}_stats.csv" ]; then
+      if [ -f "$DESTINO/${nome}_stats.csv" ]; then
         echo "[$rodada/$total] $nome já existe, pulando"
         continue
       fi
 
       echo "[$rodada/$total] $nome: cenário $c, $n cópia(s), $u usuários, $DURACAO"
-      # --no-deps: sem ele, o "run" volta o WordPress para as 3 cópias padrão
+      # --no-deps: sem ele, o "run" volta o WordPress para as 3 cópias padrão.
+      # "|| true": o Locust termina com código 1 quando houve falhas, e isso é
+      # resultado do teste, não erro do script
       docker compose run --rm --no-deps \
         -e LOCUST_FILE="$(script_do_cenario "$c")" \
-        -e LOCUST_OPTS="--headless -u $u -r $(taxa_de_entrada "$u") -t $DURACAO --reset-stats --csv /resultados/$nome" \
-        locust > "resultados/logs/${nome}.log" 2>&1
+        -e LOCUST_OPTS="--headless -u $u -r $(taxa_de_entrada "$u") -t $DURACAO --reset-stats --csv /resultados/$RELATIVO/$nome" \
+        locust > "$DESTINO/logs/${nome}.log" 2>&1 || true
+
+      # Sem CSV, o Locust nem chegou a rodar: aí sim é erro
+      if [ ! -f "$DESTINO/${nome}_stats.csv" ]; then
+        echo "ERRO: o Locust não gerou o CSV. Veja $DESTINO/logs/${nome}.log" >&2
+        exit 1
+      fi
 
       # Linha "Aggregated" do CSV: requisições, falhas, tempo médio e req/s
       awk -F, '$2 == "Aggregated" {
-        printf "    %d requisições, %d falhas, tempo médio %.0f ms, %.1f req/s\n", $3, $4, $6, $10
-      }' "resultados/${nome}_stats.csv"
+        pct = ($3 > 0) ? 100 * $4 / $3 : 0
+        printf "    %d requisições, %d falhas (%.1f%%), tempo médio %.0f ms, %.1f req/s\n", $3, $4, pct, $6, $10
+      }' "$DESTINO/${nome}_stats.csv"
+      if ! grep -q "All users spawned" "$DESTINO/logs/${nome}.log"; then
+        echo "    AVISO: nem todos os $u usuários subiram dentro de $DURACAO; aumente DURACAO"
+      fi
+      if grep -q "CPU usage above" "$DESTINO/logs/${nome}.log"; then
+        echo "    AVISO: a CPU do Locust passou de 90%; ele pode ter gerado menos carga que o pedido"
+      fi
 
       if [ "$rodada" -lt "$total" ]; then sleep "$PAUSA"; fi
     done
   done
 done
 
-echo "=== Fim: CSVs em resultados/ e saída do Locust em resultados/logs/"
+echo "=== Fim: CSVs em $DESTINO/ e saída do Locust em $DESTINO/logs/"
