@@ -18,5 +18,11 @@ if [ ! -f wordpress/wp-config.php ]; then
 fi
 
 docker compose up -d --scale wordpress="$N"
-docker compose exec nginx nginx -s reload # Nginx busca a lista nova de cópias
+# Nginx busca a lista nova de cópias. Se o Nginx acabou de subir, o reload
+# pode falhar por alguns instantes; por isso tenta até 10 vezes
+for tentativa in $(seq 10); do
+  docker compose exec -T nginx nginx -s reload && break
+  [ "$tentativa" -eq 10 ] && exit 1
+  sleep 1
+done
 docker compose ps wordpress
