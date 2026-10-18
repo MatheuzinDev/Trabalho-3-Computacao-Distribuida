@@ -1,10 +1,13 @@
 # Cenário 2: blog post com um texto de ~400 KB (post ID 9)
-from locust import HttpUser, task, between
+from locust import task, between
+# FastHttpUser gasta bem menos CPU que HttpUser: com HttpUser o próprio Locust
+# passava de 90% de CPU a partir de 250 usuários e virava o gargalo do teste
+from locust.contrib.fasthttp import FastHttpUser
 
 POST = "/?p=9"
 
 
-class LeitorCenario2(HttpUser):
+class LeitorCenario2(FastHttpUser):
     wait_time = between(1, 2)  # pausa entre as tarefas de cada usuário
 
     @task
