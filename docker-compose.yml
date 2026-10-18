@@ -42,7 +42,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # nginx.conf (original) ou nginx-otimizado.conf, escolhido pelo escalar.sh
+      # a partir de NGINX_OTIMIZADO=true|false
+      - ./${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./wordpress:/usr/share/nginx/html
     networks:
       - backend
