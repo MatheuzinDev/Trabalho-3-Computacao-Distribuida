@@ -1,0 +1,54 @@
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass
+    volumes:
+      - db_data:/var/lib/mysql
+    # Sem "ports": o MySQL fica acessível apenas pela rede interna do Compose
+    networks:
+      - backend
+
+  # Um único serviço no lugar de wordpress1/2/3: a quantidade de cópias
+  # é escolhida na hora de subir (docker compose up -d --scale wordpress=N)
+  wordpress:
+    image: wordpress:5.4.2-php7.2-apache
+    restart: always
+    depends_on:
+      - db
+    deploy:
+      replicas: 3 # quantidade padrão quando nenhuma outra é informada
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+    # Sem "ports" e sem "container_name": só o Nginx o acessa e o Docker
+    # consegue criar quantas cópias forem pedidas
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:1.19.0
+    restart: always
+    depends_on:
+      - wordpress
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./wordpress:/usr/share/nginx/html
+    networks:
+      - backend
+
+volumes:
+  db_data:
+
+networks:
+  backend:

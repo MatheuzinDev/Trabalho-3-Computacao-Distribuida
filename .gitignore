@@ -1,0 +1,5 @@
+wordpress/
+.venv/
+__pycache__/
+PLANO.md
+*.pdf
