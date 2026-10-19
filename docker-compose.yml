@@ -2,6 +2,9 @@ services:
   db:
     image: mysql:5.7
     restart: always
+    # O padrão é 151 conexões, e cada cópia do WordPress (Apache) abre até
+    # 150; com 5 e 10 cópias o banco recusava conexões (erro 500 no WordPress)
+    command: --max-connections=2000
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: wordpress
