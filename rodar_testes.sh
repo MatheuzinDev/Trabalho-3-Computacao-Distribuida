@@ -21,10 +21,10 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 INSTANCIAS=${INSTANCIAS:-"1 5 10"} # cópias do WordPress
-USUARIOS=${USUARIOS:-"500 2000 5000"} # usuários: sem erros, intermediário, muitos erros
+USUARIOS=${USUARIOS:-"100 500 10000"} # usuários: baixa, média e alta carga
 CENARIOS=${CENARIOS:-"1 2 3"}
-DURACAO=${DURACAO:-2m}              # duração de cada rodada
-PAUSA=${PAUSA:-30}                  # segundos de pausa entre rodadas
+DURACAO=${DURACAO:-4m}              # duração de cada rodada
+PAUSA=${PAUSA:-60}                  # segundos de pausa entre rodadas (o servidor se recupera da alta carga)
 PASTA=${PASTA:-}                    # subpasta opcional (ex: exploracao)
 export NGINX_OTIMIZADO=${NGINX_OTIMIZADO:-false} # lido também pelo escalar.sh
 
