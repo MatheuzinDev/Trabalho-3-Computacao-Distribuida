@@ -57,6 +57,12 @@ services:
       - nginx
     # Roda com o usuário do host para os CSVs não ficarem com dono root
     user: "${UID:-1000}:${GID:-1000}"
+    # Cada usuário simulado abre uma conexão; o limite padrão de 1024 arquivos
+    # abertos fazia o próprio Locust falhar ("No file descriptors available")
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
     environment:
       ATTACKED_HOST: http://nginx # nome do serviço do Nginx no compose
       LOCUST_FILE: teste_conexao.py
