@@ -68,9 +68,12 @@ def grafico_agrupado(titulo, rotulo_x, valores_x, rotulo_grupo, grupos, dado, ar
 
     ax.set_title(titulo)
     ax.set_xlabel(rotulo_x)
-    ax.set_ylabel("P95 do tempo de resposta (ms)")
+    ax.set_ylabel("P95 do tempo de resposta (ms, escala logarítmica)")
     ax.set_xticks(range(len(valores_x)), [str(x) for x in valores_x])
-    ax.margins(y=0.15)  # espaço para os rótulos acima das barras
+    # Logarítmica: o P95 vai de ~25 ms (baixa carga) a 60 s (alta), e numa
+    # escala linear as barras da baixa carga ficariam invisíveis
+    ax.set_yscale("log")
+    ax.set_ylim(top=ax.get_ylim()[1] * 4)  # espaço para os rótulos acima das barras
     ax.legend()
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
