@@ -63,10 +63,17 @@ services:
       nofile:
         soft: 65535
         hard: 65535
+    # Prioridade de CPU (o padrão de cada contêiner é 1024). Com 10 cópias do
+    # WordPress a máquina fica sem CPU livre e, dividindo por igual, o Locust
+    # recebia ~0,6 núcleo e não conseguia subir todos os usuários
+    cpu_shares: 16384
+    # Master + WORKERS processos no mesmo contêiner (ver locust/distribuido.sh)
+    entrypoint: ["sh", "/locust/distribuido.sh"]
     environment:
       ATTACKED_HOST: http://nginx # nome do serviço do Nginx no compose
       LOCUST_FILE: teste_conexao.py
       LOCUST_OPTS: ""
+      WORKERS: 4
     ports:
       - "8089:8089"
     volumes:
