@@ -30,8 +30,11 @@ services:
       WORDPRESS_DB_USER: wpuser
       WORDPRESS_DB_PASSWORD: wppass
       WORDPRESS_DB_NAME: wordpress
+      # Máximo de processos do Apache por cópia (ver apache-mpm-prefork.conf)
+      APACHE_MAX_WORKERS: ${APACHE_MAX_WORKERS:-40}
     volumes:
       - ./wordpress:/var/www/html
+      - ./apache-mpm-prefork.conf:/etc/apache2/mods-available/mpm_prefork.conf:ro
     # Sem "ports" e sem "container_name": só o Nginx o acessa e o Docker
     # consegue criar quantas cópias forem pedidas
     networks:
