@@ -74,10 +74,11 @@ def grafico_agrupado(titulo, rotulo_x, valores_x, rotulo_grupo, grupos, dado, ar
     # escala linear as barras da baixa carga ficariam invisíveis
     ax.set_yscale("log")
     ax.set_ylim(top=ax.get_ylim()[1] * 4)  # espaço para os rótulos acima das barras
-    ax.legend()
+    # Legenda embaixo do gráfico, para não cobrir os rótulos das barras altas
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=len(grupos))
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(arquivo, dpi=150)
+    fig.savefig(arquivo, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
