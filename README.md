@@ -213,6 +213,5 @@ Na alta carga, o P95 fica em 60 s porque esse é o tempo máximo de espera: as r
 - O Locust roda na mesma máquina que o servidor e usa CPU que poderia ir para o WordPress. O ideal seria gerar a carga de outro computador.
 - Não foi possível chegar a 100% de erros na alta carga: acima de 10000 usuários, o próprio Locust começava a falhar.
 
-## 8. Resultados – máquina do Matheus H.
-
+## 8. Resultados na máquina do Matheus Holanda
 > A preencher depois de rodar `RESULTADOS=resultados-matheus-h ./rodar_testes.sh` e `python3 gerar_graficos.py resultados-matheus-h`.
