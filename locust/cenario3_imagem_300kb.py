@@ -1,11 +1,13 @@
-# Cenário 3: blog post com uma imagem de ~300 KB (post ID 11)
+# Cenário 3: blog post com uma imagem de ~300 KB (post "Cenário 3 – Imagem 300 KB")
 from locust import task, between
 # FastHttpUser gasta bem menos CPU que HttpUser: com HttpUser o próprio Locust
 # passava de 90% de CPU a partir de 250 usuários e virava o gargalo do teste
 from locust.contrib.fasthttp import FastHttpUser
 
-POST = "/?p=11"
-IMAGEM = "/wp-content/uploads/2026/10/cenario3_imagem_300kb.jpg"
+from comum import caminho_da_imagem
+
+POST = "/?name=cenario-3-imagem-300-kb"  # slug do post (ver locust/comum.py)
+IMAGEM = caminho_da_imagem(POST, "cenario3_imagem_300kb.jpg")
 
 
 class LeitorCenario3(FastHttpUser):

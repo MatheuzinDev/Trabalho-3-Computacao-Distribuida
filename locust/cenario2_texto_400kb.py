@@ -1,10 +1,10 @@
-# Cenário 2: blog post com um texto de ~400 KB (post ID 9)
+# Cenário 2: blog post com um texto de ~400 KB (post "Cenário 2 – Texto 400 KB")
 from locust import task, between
 # FastHttpUser gasta bem menos CPU que HttpUser: com HttpUser o próprio Locust
 # passava de 90% de CPU a partir de 250 usuários e virava o gargalo do teste
 from locust.contrib.fasthttp import FastHttpUser
 
-POST = "/?p=9"
+POST = "/?name=cenario-2-texto-400-kb"  # slug do post (ver locust/comum.py)
 
 
 class LeitorCenario2(FastHttpUser):
