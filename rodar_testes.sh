@@ -2,10 +2,11 @@
 # Roda a matriz de testes de carga: para cada quantidade de cópias do
 # WordPress, executa os 3 cenários com cada quantidade de usuários.
 #
-# Uso: ./rodar_testes.sh                         (Nginx original do Trabalho 2)
-#      NGINX_OTIMIZADO=true ./rodar_testes.sh    (Nginx sem o limite de conexões)
+# Uso: RESULTADOS=resultados-<nome> ./rodar_testes.sh
 #
-# Os resultados ficam em resultados/nginx-original/ ou resultados/nginx-otimizado/
+# Cada integrante roda na sua máquina e grava numa pasta própria dentro de
+# resultados/, por exemplo RESULTADOS=resultados-matheus-d grava em
+# resultados/resultados-matheus-d/. Sem RESULTADOS, a pasta é resultados/resultados-teste/
 #
 # Os valores abaixo podem ser trocados por variáveis de ambiente, por exemplo
 # para um teste rápido:  INSTANCIAS="1" USUARIOS="10" DURACAO=10s ./rodar_testes.sh
@@ -26,11 +27,12 @@ CENARIOS=${CENARIOS:-"1 2 3"}
 DURACAO=${DURACAO:-4m}              # duração de cada rodada
 PAUSA=${PAUSA:-60}                  # segundos de pausa entre rodadas (o servidor se recupera da alta carga)
 PASTA=${PASTA:-}                    # subpasta opcional (ex: exploracao)
-export NGINX_OTIMIZADO=${NGINX_OTIMIZADO:-false} # lido também pelo escalar.sh
+RESULTADOS=${RESULTADOS:-resultados-teste} # pasta desta máquina dentro de resultados/
 
-if [ "$NGINX_OTIMIZADO" = true ]; then TIPO=nginx-otimizado; else TIPO=nginx-original; fi
-RELATIVO="$TIPO${PASTA:+/$PASTA}"   # caminho dentro de resultados/
+RELATIVO="$RESULTADOS${PASTA:+/$PASTA}" # caminho dentro de resultados/
 DESTINO="resultados/$RELATIVO"
+# Dentro do contêiner do Locust, a pasta resultados/ aparece como /resultados
+CSV_NO_LOCUST="/resultados/$RELATIVO"
 
 # Script do Locust de cada cenário
 script_do_cenario() {
@@ -75,7 +77,7 @@ esperar_wordpress() {
 total=$(( $(wc -w <<< "$INSTANCIAS") * $(wc -w <<< "$CENARIOS") * $(wc -w <<< "$USUARIOS") ))
 rodada=0
 mkdir -p "$DESTINO/logs"
-echo "Nginx: $TIPO | resultados em $DESTINO/"
+echo "Resultados em $DESTINO/"
 
 for n in $INSTANCIAS; do
   echo "=== Subindo $n cópia(s) do WordPress"
@@ -103,7 +105,7 @@ for n in $INSTANCIAS; do
       # resultado do teste, não erro do script
       docker compose run --rm --no-deps \
         -e LOCUST_FILE="$(script_do_cenario "$c")" \
-        -e LOCUST_OPTS="--headless -u $u -r $(taxa_de_entrada "$u") -t $DURACAO --reset-stats --csv /resultados/$RELATIVO/$nome" \
+        -e LOCUST_OPTS="--headless -u $u -r $(taxa_de_entrada "$u") -t $DURACAO --reset-stats --csv $CSV_NO_LOCUST/$nome" \
         locust > "$DESTINO/logs/${nome}.log" 2>&1 || true
 
       # Sem CSV, o Locust nem chegou a rodar: aí sim é erro

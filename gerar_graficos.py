@@ -1,9 +1,10 @@
 """Gera os gráficos de barras agrupadas do P95 a partir dos CSVs do Locust.
 
-Uso: python3 gerar_graficos.py [pasta]   (padrão: resultados/nginx-otimizado)
+Uso: python3 gerar_graficos.py <nome>   (ex: resultados-matheus-d)
 
-Lê a linha "Aggregated" de cada <pasta>/c<cenário>_i<cópias>_u<usuários>_stats.csv
-e grava em <pasta>/graficos/, para cada cenário:
+Usa a pasta resultados/<nome>/ (também aceita o caminho completo). Lê a linha
+"Aggregated" de cada <pasta>/c<cenário>_i<cópias>_u<usuários>_stats.csv e grava
+em <pasta>/graficos/, para cada cenário:
   - p95_por_carga_cenarioN.png      X = usuários, uma barra por quantidade de cópias
   - p95_por_instancia_cenarioN.png  X = cópias, uma barra por quantidade de usuários
 Acima de cada barra vai o P95 e, embaixo dele, a % de falhas da rodada.
@@ -83,7 +84,11 @@ def grafico_agrupado(titulo, rotulo_x, valores_x, rotulo_grupo, grupos, dado, ar
 
 
 def main():
-    pasta = Path(sys.argv[1] if len(sys.argv) > 1 else "resultados/nginx-otimizado")
+    if len(sys.argv) != 2:
+        sys.exit("Uso: python3 gerar_graficos.py <nome>   (ex: resultados-matheus-d)")
+    pasta = Path(sys.argv[1])
+    if not pasta.is_dir():  # só o nome: procura dentro de resultados/
+        pasta = Path("resultados") / sys.argv[1]
     resultados = ler_resultados(pasta)
     if not resultados:
         sys.exit(f"Nenhum CSV c*_i*_u*_stats.csv encontrado em {pasta}/")
