@@ -4,4 +4,3 @@ __pycache__/
 PLANO.md
 *.pdf
 resultados/**/*.csv
-resultados/**/logs/

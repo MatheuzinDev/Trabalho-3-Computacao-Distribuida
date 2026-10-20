@@ -1,0 +1,28 @@
+Nginx usando nginx-otimizado.conf
+ Container trabalho-3-db-1 Running 
+ Container trabalho-3-wordpress-1 Running 
+ Container trabalho-3-nginx-1 Running 
+ Container trabalho-3-locust-1 Running 
+ Container trabalho-3-wordpress-5 Creating 
+ Container trabalho-3-wordpress-3 Creating 
+ Container trabalho-3-wordpress-4 Creating 
+ Container trabalho-3-wordpress-2 Creating 
+ Container trabalho-3-wordpress-5 Created 
+ Container trabalho-3-wordpress-4 Created 
+ Container trabalho-3-wordpress-3 Created 
+ Container trabalho-3-wordpress-2 Created 
+ Container trabalho-3-wordpress-2 Starting 
+ Container trabalho-3-wordpress-2 Started 
+ Container trabalho-3-wordpress-3 Starting 
+ Container trabalho-3-wordpress-3 Started 
+ Container trabalho-3-wordpress-5 Starting 
+ Container trabalho-3-wordpress-5 Started 
+ Container trabalho-3-wordpress-4 Starting 
+ Container trabalho-3-wordpress-4 Started 
+2026/10/20 03:30:41 [notice] 52#52: signal process started
+NAME                     IMAGE                           COMMAND                  SERVICE     CREATED          STATUS                  PORTS
+trabalho-3-wordpress-1   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   45 minutes ago   Up 45 minutes           80/tcp
+trabalho-3-wordpress-2   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   1 second ago     Up Less than a second   80/tcp
+trabalho-3-wordpress-3   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   1 second ago     Up Less than a second   80/tcp
+trabalho-3-wordpress-4   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   1 second ago     Up Less than a second   80/tcp
+trabalho-3-wordpress-5   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   1 second ago     Up Less than a second   80/tcp
