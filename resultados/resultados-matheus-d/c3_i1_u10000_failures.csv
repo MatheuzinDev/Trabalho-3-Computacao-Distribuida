@@ -1,0 +1,6 @@
+Method,Name,Error,Occurrences
+GET,post (HTML),"RetriesExceeded('http://nginx/?p=11', 1, original=timed out)",13614
+GET,post (HTML),"BadStatusCode('http://nginx/?p=11', code=504)",2363
+GET,imagem 300 KB,"RetriesExceeded('http://nginx/wp-content/uploads/2026/10/cenario3_imagem_300kb.jpg', 1, original=timed out)",9083
+GET,imagem 300 KB,"BadStatusCode('http://nginx/wp-content/uploads/2026/10/cenario3_imagem_300kb.jpg', code=504)",1777
+GET,post (HTML),"BadStatusCode('http://nginx/?p=11', code=502)",1
