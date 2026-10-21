@@ -67,10 +67,10 @@ esperar_copias() {
 # Espera o WordPress responder um post (só funciona com o MySQL já pronto)
 esperar_wordpress() {
   for _ in $(seq 60); do
-    [ "$(curl -sL -o /dev/null -w '%{http_code}' 'http://localhost/?p=6')" = 200 ] && return 0
+    [ "$(curl -sL -o /dev/null -w '%{http_code}' 'http://localhost/?name=cenario-1-imagem-1-mb')" = 200 ] && return 0
     sleep 2
   done
-  echo "ERRO: o WordPress não respondeu o post 6 com 200." >&2
+  echo "ERRO: o WordPress não respondeu o post do cenário 1 com 200 (confira os posts no README)." >&2
   exit 1
 }
 
