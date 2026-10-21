@@ -69,7 +69,7 @@ trabalho-3/
 
 Cada usuário do Locust repete o mesmo ciclo: abre o post, baixa a imagem (cenários 1 e 3) e espera de 1 a 2 s. O Locust não baixa sozinho as imagens de uma página, por isso o GET da imagem fica explícito no script.
 
-Os posts são acessados pelo **slug** (`/?name=cenario-1-imagem-1-mb`) e não pelo ID (`/?p=6`). O ID muda de uma instalação para outra, e o slug só depende do título. O caminho da imagem (`/wp-content/uploads/<ano>/<mês>/...`) depende do mês em que ela foi enviada, então o `locust/comum.py` o procura no HTML do post quando o teste começa.
+Os posts são acessados pelo **slug** (`/?name=cenario-1-imagem-1-mb`) e não pelo ID (`/?p=6`). O ID muda de uma máquina para outra, e o slug só depende do título. O caminho da imagem (`/wp-content/uploads/<ano>/<mês>/...`) depende do mês em que ela foi enviada, então o `locust/comum.py` o procura no HTML do post quando o teste começa.
 
 Para cada quantidade de cópias, o `rodar_testes.sh`:
 
@@ -94,10 +94,7 @@ Durante os testes apareceram gargalos que não eram do WordPress. Cada ajuste ab
 
 ### Por que 100, 500 e 10000 usuários
 
-As quantidades foram escolhidas numa exploração com 50 a 20000 usuários, seguindo o que o professor pediu:
-
-- **Baixa e média carga sem erros e com tempos bem diferentes:** 100 e 500 deram 0% de falhas em todas as rodadas, e o P95 da média é de 40 a 110 vezes o da baixa. Com 1000 usuários já apareciam falhas no cenário 2.
-- **Alta carga com muitos erros:** 10000 foi a maior carga que o Locust conseguiu gerar na mesma máquina. Com 20000, o próprio Locust começava a falhar, por falta de CPU e de portas de rede.
+Forem feitos testes de 50 a 20000 usuários. Alguns problemas aconteciam quando o valor ultrapassava os 20000. Por exemplo, o próprio Locust começava a falhar, por falta de CPU e de portas de rede. Então escolhemos 10000 usuários para o valor para alta carga. Já na baixa e média carga, conforme pedido em sala, foram escolhidas medidas que davam 0% de erros e que havia uma diferença significante de tempo de tempo entre eles, para tornarmos os testes mais coerentes. Então, foram escolhidos os valores 100 e 500 para baixa e média carga, respectivamente.
 
 ## 5. Como rodar
 
@@ -147,6 +144,19 @@ python3 gerar_graficos.py resultados-<seu-nome>
 ```
 
 A matriz completa leva **cerca de 2h25**. Não precisa subir as cópias antes, porque o script faz isso.
+
+### Se o teste for interrompido
+
+Se a máquina desligar, travar ou o terminal fechar no meio do teste, derrube os contêineres e rode o mesmo comando de novo:
+
+```bash
+docker compose down
+RESULTADOS=resultados-<seu-nome> ./rodar_testes.sh
+```
+
+As rodadas que já terminaram são puladas, e o teste continua de onde parou.
+
+Se a rodada que estava rodando deixou CSVs na pasta, apague-os antes, senão ela também é pulada. Por exemplo, se parou na `c2_i10_u10000`: `rm resultados/resultados-<seu-nome>/c2_i10_u10000_*`.
 
 ## 6. Pasta de resultados de cada máquina
 
