@@ -3,4 +3,4 @@ wordpress/
 __pycache__/
 PLANO.md
 *.pdf
-resultados/**/*.csv
+resultados/**/*_stats_history.csv
