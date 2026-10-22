@@ -1,0 +1,5 @@
+Method,Name,Error,Occurrences
+GET,post (HTML),"RetriesExceeded('http://nginx/?name=cenario-3-imagem-300-kb', 1, original=timed out)",12099
+GET,imagem 300 KB,"RetriesExceeded('http://nginx/wp-content/uploads/2026/10/cenario3_imagem_300kb.jpg', 1, original=timed out)",7288
+GET,post (HTML),"BadStatusCode('http://nginx/?name=cenario-3-imagem-300-kb', code=504)",5704
+GET,imagem 300 KB,"BadStatusCode('http://nginx/wp-content/uploads/2026/10/cenario3_imagem_300kb.jpg', code=504)",2679

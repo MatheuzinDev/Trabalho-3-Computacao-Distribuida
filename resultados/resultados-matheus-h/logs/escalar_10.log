@@ -1,0 +1,40 @@
+ Container trabalho-3-computacao-distribuida-wordpress-1 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-2 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-3 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-4 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-5 Running 
+ Container trabalho-3-computacao-distribuida-nginx-1 Running 
+ Container trabalho-3-computacao-distribuida-locust-1 Running 
+ Container trabalho-3-computacao-distribuida-db-1 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-10 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-7 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-8 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-9 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-6 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-10 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-6 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-7 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-9 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-8 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-8 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-8 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-6 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-6 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-7 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-7 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-9 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-9 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-10 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-10 Started 
+2026/10/22 01:27:12 [notice] 77#77: signal process started
+NAME                                             IMAGE                           COMMAND                  SERVICE     CREATED          STATUS          PORTS
+trabalho-3-computacao-distribuida-wordpress-1    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   23 seconds ago   Up 22 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-10   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   3 seconds ago    Up 1 second     80/tcp
+trabalho-3-computacao-distribuida-wordpress-2    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   13 seconds ago   Up 12 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-3    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   13 seconds ago   Up 11 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-4    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   13 seconds ago   Up 12 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-5    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   13 seconds ago   Up 12 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-6    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   3 seconds ago    Up 2 seconds    80/tcp
+trabalho-3-computacao-distribuida-wordpress-7    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   3 seconds ago    Up 2 seconds    80/tcp
+trabalho-3-computacao-distribuida-wordpress-8    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   3 seconds ago    Up 2 seconds    80/tcp
+trabalho-3-computacao-distribuida-wordpress-9    wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   3 seconds ago    Up 1 second     80/tcp

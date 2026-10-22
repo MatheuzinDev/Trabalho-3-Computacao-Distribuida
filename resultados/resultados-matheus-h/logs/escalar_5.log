@@ -1,0 +1,27 @@
+ Container trabalho-3-computacao-distribuida-wordpress-1 Running 
+ Container trabalho-3-computacao-distribuida-nginx-1 Running 
+ Container trabalho-3-computacao-distribuida-locust-1 Running 
+ Container trabalho-3-computacao-distribuida-db-1 Running 
+ Container trabalho-3-computacao-distribuida-wordpress-5 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-2 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-4 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-3 Creating 
+ Container trabalho-3-computacao-distribuida-wordpress-3 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-4 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-2 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-5 Created 
+ Container trabalho-3-computacao-distribuida-wordpress-5 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-5 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-4 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-4 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-2 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-2 Started 
+ Container trabalho-3-computacao-distribuida-wordpress-3 Starting 
+ Container trabalho-3-computacao-distribuida-wordpress-3 Started 
+2026/10/22 01:27:02 [notice] 59#59: signal process started
+NAME                                            IMAGE                           COMMAND                  SERVICE     CREATED          STATUS          PORTS
+trabalho-3-computacao-distribuida-wordpress-1   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   12 seconds ago   Up 11 seconds   80/tcp
+trabalho-3-computacao-distribuida-wordpress-2   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   2 seconds ago    Up 1 second     80/tcp
+trabalho-3-computacao-distribuida-wordpress-3   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   2 seconds ago    Up 1 second     80/tcp
+trabalho-3-computacao-distribuida-wordpress-4   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   2 seconds ago    Up 2 seconds    80/tcp
+trabalho-3-computacao-distribuida-wordpress-5   wordpress:5.4.2-php7.2-apache   "docker-entrypoint.s…"   wordpress   2 seconds ago    Up 2 seconds    80/tcp

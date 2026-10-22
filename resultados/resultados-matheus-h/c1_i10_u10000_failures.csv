@@ -1,0 +1,5 @@
+Method,Name,Error,Occurrences
+GET,post (HTML),"BadStatusCode('http://nginx/?name=cenario-1-imagem-1-mb', code=502)",99046
+GET,imagem 1 MB,"RetriesExceeded('http://nginx/wp-content/uploads/2026/10/cenario1_imagem_1mb.jpg', 1, original=timed out)",4141
+GET,post (HTML),"RetriesExceeded('http://nginx/?name=cenario-1-imagem-1-mb', 1, original=timed out)",7182
+GET,imagem 1 MB,"BadStatusCode('http://nginx/wp-content/uploads/2026/10/cenario1_imagem_1mb.jpg', code=502)",100285
